@@ -58,7 +58,7 @@ internal class ImageViewerView<T> @JvmOverloads constructor(
     internal var isZoomingAllowed = true
     internal var isSwipeToDismissAllowed = true
 
-    internal var currentPosition: Int
+    var currentPosition: Int
         get() = imagesPager.currentItem
         set(value) {
             imagesPager.currentItem = value

@@ -53,7 +53,7 @@ class RotationDemoActivity : AppCompatActivity() {
         viewer = StfalconImageViewer.Builder<Poster>(this, Demo.posters, ::loadPosterImage)
             .withTransitionFrom(getTransitionTarget(startPosition))
             .withStartPosition(startPosition)
-            .withImageChangeListener {
+            .withImageChangeListener { it, v ->
                 currentPosition = it
                 viewer.updateTransitionImage(getTransitionTarget(it))
             }

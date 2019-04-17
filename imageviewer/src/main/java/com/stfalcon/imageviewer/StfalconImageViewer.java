@@ -43,7 +43,7 @@ public class StfalconImageViewer<T> {
     protected StfalconImageViewer(@NonNull Context context, @NonNull BuilderData<T> builderData) {
         this.context = context;
         this.builderData = builderData;
-        this.dialog = new ImageViewerDialog<>(context, builderData);
+        this.dialog = new ImageViewerDialog<>(context, builderData, this);
     }
 
     /**
@@ -94,6 +94,10 @@ public class StfalconImageViewer<T> {
 
     public int currentPosition() {
         return dialog.getCurrentPosition();
+    }
+
+    public void setCurrentPosition(int position) {
+        dialog.getViewerView().setCurrentPosition(position);
     }
 
     /**

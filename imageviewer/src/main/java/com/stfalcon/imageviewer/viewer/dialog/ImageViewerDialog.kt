@@ -21,16 +21,18 @@ import android.view.KeyEvent
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import com.stfalcon.imageviewer.R
+import com.stfalcon.imageviewer.StfalconImageViewer
 import com.stfalcon.imageviewer.viewer.builder.BuilderData
 import com.stfalcon.imageviewer.viewer.view.ImageViewerView
 
 internal class ImageViewerDialog<T>(
     context: Context,
-    private val builderData: BuilderData<T>
+    private val builderData: BuilderData<T>,
+    private val stfalconImageViewer: StfalconImageViewer<T>
 ) {
 
     private val dialog: AlertDialog
-    private val viewerView: ImageViewerView<T> = ImageViewerView(context)
+    val viewerView: ImageViewerView<T> = ImageViewerView(context)
     private var animateOpen = true
 
     private val dialogStyle: Int
@@ -98,7 +100,7 @@ internal class ImageViewerDialog<T>(
             setBackgroundColor(builderData.backgroundColor)
             setImages(builderData.images, builderData.startPosition, builderData.imageLoader)
 
-            onPageChange = { position -> builderData.imageChangeListener?.onImageChange(position) }
+            onPageChange = { position -> builderData.imageChangeListener?.onImageChange(position, stfalconImageViewer) }
             onDismiss = { dialog.dismiss() }
         }
     }

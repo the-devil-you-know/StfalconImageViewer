@@ -53,7 +53,7 @@ class StylingDemoActivity : BaseActivity() {
 
         val builder = StfalconImageViewer.Builder<Poster>(this, posters, ::loadPosterImage)
             .withStartPosition(startPosition)
-            .withImageChangeListener { position ->
+            .withImageChangeListener { position, v ->
                 if (options.isPropertyEnabled(SHOW_TRANSITION)) {
                     viewer?.updateTransitionImage(stylingPostersGridView.imageViews[position])
                 }
