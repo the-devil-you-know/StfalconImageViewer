@@ -57,6 +57,7 @@ internal class ImageViewerDialog<T>(
     fun show(animate: Boolean) {
         animateOpen = animate
         dialog.show()
+        builderData.imageChangeListener?.onImageChange(builderData.startPosition, stfalconImageViewer)
     }
 
     fun close() {
