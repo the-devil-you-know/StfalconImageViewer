@@ -256,6 +256,7 @@ internal class ImageViewerView<T> @JvmOverloads constructor(
     }
 
     private fun prepareViewsForViewer() {
+        imagesPager.applyMargin(containerPadding[0], containerPadding[1], containerPadding[2], containerPadding[3])
         transitionImageContainer.makeGone()
         imagesPager.makeVisible()
     }
