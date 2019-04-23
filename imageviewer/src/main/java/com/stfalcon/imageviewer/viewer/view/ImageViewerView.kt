@@ -152,9 +152,13 @@ internal class ImageViewerView<T> @JvmOverloads constructor(
             return true
         }
 
-        if (transitionImageAnimator.isAnimating) {
-            return true
-        }
+        /**
+         * TODO в продакшн иногда крешилось из-за неинициализированной transitionImageAnimator
+         * Т.к. данная фича не используется, решено ее отключить
+         */
+//        if (transitionImageAnimator.isAnimating) {
+//            return true
+//        }
 
         //one more tiny kludge to prevent single tap a one-finger zoom which is broken by the SDK
         if (wasDoubleTapped &&
