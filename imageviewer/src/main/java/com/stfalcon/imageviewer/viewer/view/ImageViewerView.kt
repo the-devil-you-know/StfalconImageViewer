@@ -98,7 +98,7 @@ internal class ImageViewerView<T> @JvmOverloads constructor(
     private var directionDetector: SwipeDirectionDetector
     private var gestureDetector: GestureDetectorCompat
     private var scaleDetector: ScaleGestureDetector
-    private lateinit var swipeDismissHandler: SwipeToDismissHandler
+    private var swipeDismissHandler: SwipeToDismissHandler? = null // TODO lateinit крешилось в проде
 
     private var wasScaled: Boolean = false
     private var wasDoubleTapped = false
@@ -107,7 +107,7 @@ internal class ImageViewerView<T> @JvmOverloads constructor(
 
     private var images: List<T> = listOf()
     private var imageLoader: ImageLoader<T>? = null
-    private lateinit var transitionImageAnimator: TransitionImageAnimator
+    private var transitionImageAnimator: TransitionImageAnimator? = null // TODO lateinit крешилось в проде
 
     private var startPosition: Int = 0
         set(value) {
@@ -152,13 +152,9 @@ internal class ImageViewerView<T> @JvmOverloads constructor(
             return true
         }
 
-        /**
-         * TODO в продакшн иногда крешилось из-за неинициализированной transitionImageAnimator
-         * Т.к. данная фича не используется, решено ее отключить
-         */
-//        if (transitionImageAnimator.isAnimating) {
-//            return true
-//        }
+        if (transitionImageAnimator?.isAnimating == true) {
+            return true
+        }
 
         //one more tiny kludge to prevent single tap a one-finger zoom which is broken by the SDK
         if (wasDoubleTapped &&
@@ -206,7 +202,7 @@ internal class ImageViewerView<T> @JvmOverloads constructor(
 
     internal fun close() {
         if (shouldDismissToBottom) {
-            swipeDismissHandler.initiateDismissToBottom()
+            swipeDismissHandler?.initiateDismissToBottom()
         } else {
             animateClose()
         }
@@ -232,7 +228,7 @@ internal class ImageViewerView<T> @JvmOverloads constructor(
     }
 
     private fun animateOpen() {
-        transitionImageAnimator.animateOpen(
+        transitionImageAnimator?.animateOpen(
             containerPadding = containerPadding,
             onTransitionStart = { duration ->
                 backgroundView.animateAlpha(0f, 1f, duration)
@@ -245,7 +241,7 @@ internal class ImageViewerView<T> @JvmOverloads constructor(
         prepareViewsForTransition()
         dismissContainer.applyMargin(0, 0, 0, 0)
 
-        transitionImageAnimator.animateClose(
+        transitionImageAnimator?.animateClose(
             shouldDismissToBottom = shouldDismissToBottom,
             onTransitionStart = { duration ->
                 backgroundView.animateAlpha(backgroundView.alpha, 0f, duration)
@@ -271,7 +267,7 @@ internal class ImageViewerView<T> @JvmOverloads constructor(
         return when (swipeDirection) {
             UP, DOWN -> {
                 if (isSwipeToDismissAllowed && !wasScaled && imagesPager.isIdle) {
-                    swipeDismissHandler.onTouch(rootContainer, event)
+                    swipeDismissHandler?.onTouch(rootContainer, event) ?: true
                 } else true
             }
             LEFT, RIGHT -> {
@@ -299,13 +295,13 @@ internal class ImageViewerView<T> @JvmOverloads constructor(
         wasScaled = false
         imagesPager.dispatchTouchEvent(event)
 
-        swipeDismissHandler.onTouch(rootContainer, event)
+        swipeDismissHandler?.onTouch(rootContainer, event)
         isOverlayWasClicked = dispatchOverlayTouch(event)
     }
 
     private fun handleEventActionUp(event: MotionEvent) {
         wasDoubleTapped = false
-        swipeDismissHandler.onTouch(rootContainer, event)
+        swipeDismissHandler?.onTouch(rootContainer, event)
         imagesPager.dispatchTouchEvent(event)
         isOverlayWasClicked = dispatchOverlayTouch(event)
     }
