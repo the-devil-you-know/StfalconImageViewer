@@ -57,7 +57,7 @@ internal class ImageViewerDialog<T>(
                 setOnDismissListener { builderData.onDismissListener?.onDismiss() }
             }
 
-        (dialog.context as? LifecycleOwner)?.apply {
+        (context as? LifecycleOwner)?.apply {
             lifecycle.addObserver(object : LifecycleObserver {
                @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
                fun onDestroy() = dialog.dismiss()
