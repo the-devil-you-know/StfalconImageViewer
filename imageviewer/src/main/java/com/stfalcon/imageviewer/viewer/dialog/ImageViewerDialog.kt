@@ -20,6 +20,10 @@ import android.content.Context
 import android.view.KeyEvent
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.OnLifecycleEvent
 import com.stfalcon.imageviewer.R
 import com.stfalcon.imageviewer.StfalconImageViewer
 import com.stfalcon.imageviewer.viewer.builder.BuilderData
@@ -52,6 +56,13 @@ internal class ImageViewerDialog<T>(
                 setOnShowListener { viewerView.open(builderData.transitionView, animateOpen) }
                 setOnDismissListener { builderData.onDismissListener?.onDismiss() }
             }
+
+        (dialog.context as? LifecycleOwner)?.apply {
+            lifecycle.addObserver(object : LifecycleObserver {
+               @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+               fun onDestroy() = dialog.dismiss()
+            })
+        }
     }
 
     fun show(animate: Boolean) {
